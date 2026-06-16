@@ -4,392 +4,178 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Campo Minado: HTML vs CSS</title>
-    <style>
-        :root {
-            --grid-gap: 8px;
-            --background-color: #212529;
-            --cell-color-initial: #6c757d;   
-            --cell-color-html: #e34f26; /* Laranja HTML */
-            --cell-color-css: #0277bd;  /* Azul CSS */
-            --cell-color-revealed: #ffffff; 
-            --text-color-light: #ffffff;
-            --text-color-dark: #000000;
-            --border-color: #dee2e6;
-            --border-radius: 8px;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background-color: var(--background-color);
-            margin: 0;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-        
-        h1 {
-            color: #f8f9fa;
-            margin-bottom: 5px;
-            text-align: center;
-        }
-
-        p.subtitle {
-            color: #adb5bd;
-            margin-bottom: 20px;
-            text-align: center;
-            font-size: 1.1rem;
-        }
-
-        /* Contêiner de Telas para Alternar */
-        .screen {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 100%;
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        /* Botões */
-        .btn {
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            font-size: 1.2rem;
-            font-weight: bold;
-            border-radius: 5px;
-            cursor: pointer;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-            transition: background-color 0.2s, transform 0.1s;
-        }
-
-        .btn:active {
-            transform: scale(0.98);
-        }
-
-        #start-btn {
-            background-color: #28a745;
-            margin-bottom: 15px;
-        }
-
-        #start-btn:hover {
-            background-color: #218838;
-        }
-
-        #credits-btn {
-            background-color: #495057;
-            font-size: 1rem;
-            padding: 8px 20px;
-        }
-
-        #credits-btn:hover {
-            background-color: #343a40;
-        }
-
-        .reset-btn-style {
-            background-color: #dc3545;
-            margin-bottom: 15px;
-        }
-
-        .reset-btn-style:hover {
-            background-color: #bd2130;
-        }
-
-        #back-btn {
-            background-color: #dc3545;
-            margin-bottom: 30px;
-        }
-
-        #back-btn:hover {
-            background-color: #bd2130;
-        }
-
-        /* Tela do Cronômetro */
-        #countdown-display {
-            font-size: 4rem;
-            color: #ffc107;
-            font-weight: bold;
-            margin: 10px 0;
-            min-height: 80px;
-            text-align: center;
-        }
-
-        /* Grid do Jogo */
-        .grid-container {
-            display: grid;
-            width: 100%;
-            max-width: 1000px;
-            grid-template-columns: repeat(10, 1fr);
-            gap: var(--grid-gap);
-            opacity: 0.3;
-            pointer-events: none; 
-            transition: opacity 0.3s ease;
-        }
-
-        .grid-container.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .cell {
-            aspect-ratio: 1 / 1; 
-            width: 100%;
-            border-radius: var(--border-radius);
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            font-weight: bold;
-            padding: 5px;
-            box-sizing: border-box;
-            transition: transform 0.2s ease, background-color 0.2s, color 0.2s;
-            user-select: none;
-            background-color: var(--cell-color-initial);
-            color: var(--text-color-light);
-            font-size: clamp(14px, 2.5vw, 22px);
-        }
-
-        .cell:not(.revealed):hover {
-            transform: scale(1.05);
-            z-index: 10;
-        }
-
-        .cell.named.type-html { background-color: var(--cell-color-html); }
-        .cell.named.type-css { background-color: var(--cell-color-css); }
-        
-        .cell.named {
-            color: var(--text-color-light);
-            font-size: clamp(10px, 1.5vw, 14px);
-            word-break: break-all;
-        }
-        
-        .cell.revealed {
-            background-color: var(--cell-color-revealed);
-            color: var(--text-color-dark);
-            border: 2px solid var(--border-color);
-            font-weight: normal;
-            cursor: default;
-            padding: 5px;
-            font-size: clamp(9px, 1.1vw, 13px);
-            line-height: 1.2;
-        }
-
-        /* Estilização da Tela de Créditos */
-        .credits-box {
-            background-color: #343a40;
-            border: 2px solid #495057;
-            padding: 30px;
-            border-radius: 10px;
-            text-align: center;
-            color: #f8f9fa;
-            max-width: 400px;
-            width: 100%;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-        }
-
-        .credits-box h2 {
-            color: #ffc107;
-            margin-top: 0;
-        }
-
-        .credits-box p {
-            font-size: 1.3rem;
-            margin: 15px 0 0 0;
-            font-weight: 500;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div id="main-screen" class="screen">
-    <h1>Campo Minado: HTML vs CSS</h1>
-    <p class="subtitle">1º clique: Revela o termo (Laranja = HTML | Azul = CSS) • 2º clique: Revela a função</p>
+    <div id="main-screen" class="screen">
+        <h1>Campo Minado: HTML vs CSS</h1>
+        <p class="subtitle">1º clique: Revela o termo (Laranja = HTML | Azul = CSS) • 2º clique: Revela a função</p>
 
-    <button id="start-btn" class="btn">Começar Jogo</button>
-    <button id="credits-btn" class="btn">Créditos</button>
-    <button id="home-btn" class="btn reset-btn-style hidden">Voltar para o Início</button>
-    
-    <div id="countdown-display"></div>
-    <div class="grid-container" id="minefield"></div>
-</div>
-
-<div id="credits-screen" class="screen hidden">
-    <button id="back-btn" class="btn">Voltar para o Início</button>
-    
-    <div class="credits-box">
-        <h2>Desenvolvedor</h2>
-        <p>Davi Guilherme de Lima</p>
+        <button id="start-btn" class="btn">Começar Jogo</button>
+        <button id="credits-btn" class="btn">Créditos</button>
+        <button id="home-btn" class="btn reset-btn-style hidden">Voltar para o Início</button>
+        <div id="countdown-display"></div>
+        <div class="grid-container" id="minefield"></div>
     </div>
-</div>
 
-<script>
-    const minefield = document.getElementById('minefield');
-    const startBtn = document.getElementById('start-btn');
-    const creditsBtn = document.getElementById('credits-btn');
-    const homeBtn = document.getElementById('home-btn');
-    const backBtn = document.getElementById('back-btn');
-    const countdownDisplay = document.getElementById('countdown-display');
-    
-    const mainScreen = document.getElementById('main-screen');
-    const creditsScreen = document.getElementById('credits-screen');
-    
-    let timer; // Variável global para controlar o intervalo do cronômetro
+    <div id="credits-screen" class="screen hidden">
+        <button id="back-btn" class="btn">Voltar para o Início</button>
+        <div class="credits-box">
+            <h2>Desenvolvedor</h2>
+            <p>Davi Guilherme de Lima</p>
+        </div>
+    </div>
 
-    // Lista de itens contendo as 25 tags HTML e 25 propriedades CSS
-    const items = [
-        // === 25 TAGS HTML BASICAS ===
-        { type: 'html', name: '<div>', answer: 'Divisão genérica em bloco.' },
-        { type: 'html', name: '<span>', answer: 'Contêiner em linha para texto.' },
-        { type: 'html', name: '<p>', answer: 'Define um parágrafo.' },
-        { type: 'html', name: '<a>', answer: 'Cria um hiperlink.' },
-        { type: 'html', name: '<img>', answer: 'Exibe uma imagem na tela.' },
-        { type: 'html', name: '<ul>', answer: 'Lista não ordenada (bolinhas).' },
-        { type: 'html', name: '<ol>', answer: 'Lista ordenada (números).' },
-        { type: 'html', name: '<li>', answer: 'Item de uma lista.' },
-        { type: 'html', name: '<h1>', answer: 'Título principal da página.' },
-        { type: 'html', name: '<h2>', answer: 'Subtítulo de nível 2.' },
-        { type: 'html', name: '<header>', answer: 'Cabeçalho da página ou seção.' },
-        { type: 'html', name: '<footer>', answer: 'Rodapé da página ou seção.' },
-        { type: 'html', name: '<nav>', answer: 'Bloco de links de navegação.' },
-        { type: 'html', name: '<main>', answer: 'Conteúdo principal do site.' },
-        { type: 'html', name: '<section>', answer: 'Seção genérica de conteúdo.' },
-        { type: 'html', name: '<form>', answer: 'Formulário para envio de dados.' },
-        { type: 'html', name: '<input>', answer: 'Campo para o usuário digitar.' },
-        { type: 'html', name: '<button>', answer: 'Botão clicável.' },
-        { type: 'html', name: '<br>', answer: 'Quebra de linha obrigatória.' },
-        { type: 'html', name: '<hr>', answer: 'Linha horizontal divisória.' },
-        { type: 'html', name: '<strong>', answer: 'Texto em negrito/importante.' },
-        { type: 'html', name: '<em>', answer: 'Texto em itálico/ênfase.' },
-        { type: 'html', name: '<html>', answer: 'Elemento raiz do documento.' },
-        { type: 'html', name: '<head>', answer: 'Contém os metadados e configurações.' },
-        { type: 'html', name: '<body>', answer: 'Corpo visível da página.' },
+    <script>
+        const minefield = document.getElementById('minefield');
+        const startBtn = document.getElementById('start-btn');
+        const creditsBtn = document.getElementById('credits-btn');
+        const homeBtn = document.getElementById('home-btn');
+        const backBtn = document.getElementById('back-btn');
+        const countdownDisplay = document.getElementById('countdown-display');
+        const mainScreen = document.getElementById('main-screen');
+        const creditsScreen = document.getElementById('credits-screen');
+        let timer; 
 
-        // === 25 PROPRIEDADES CSS BASICAS ===
-        { type: 'css', name: 'color', answer: 'Altera a cor do texto.' },
-        { type: 'css', name: 'background-color', answer: 'Modifica a cor de fundo.' },
-        { type: 'css', name: 'font-size', answer: 'Define o tamanho da fonte.' },
-        { type: 'css', name: 'font-family', answer: 'Define o tipo/família da fonte.' },
-        { type: 'css', name: 'font-weight', answer: 'Ajusta a espessura (negrito) da fonte.' },
-        { type: 'css', name: 'width', answer: 'Define a largura do elemento.' },
-        { type: 'css', name: 'height', answer: 'Define a altura do elemento.' },
-        { type: 'css', name: 'padding', answer: 'Espaçamento interno do elemento.' },
-        { type: 'css', name: 'margin', answer: 'Espaçamento externo do elemento.' },
-        { type: 'css', name: 'border', answer: 'Cria uma borda ao redor.' },
-        { type: 'css', name: 'border-radius', answer: 'Arredonda os cantos do elemento.' },
-        { type: 'css', name: 'text-align', answer: 'Alinha o texto (left, center, right).' },
-        { type: 'css', name: 'display', answer: 'Define o tipo de renderização (flex, block...).' },
-        { type: 'css', name: 'flex-direction', answer: 'Define a direção dos itens no Flexbox.' },
-        { type: 'css', name: 'justify-content', answer: 'Alinha os itens no eixo principal.' },
-        { type: 'css', name: 'align-items', answer: 'Alinha os itens no eixo cruzado.' },
-        { type: 'css', name: 'position', answer: 'Define o método de posicionamento.' },
-        { type: 'css', name: 'top / left', answer: 'Move elementos posicionados.' },
-        { type: 'css', name: 'box-shadow', answer: 'Adiciona sombra ao redor do elemento.' },
-        { type: 'css', name: 'opacity', answer: 'Ajusta o nível de transparência.' },
-        { type: 'css', name: 'cursor', answer: 'Muda o tipo de ponteiro do mouse.' },
-        { type: 'css', name: 'text-decoration', answer: 'Adiciona/remove traços e sublinhados.' },
-        { type: 'css', name: 'z-index', answer: 'Controla a ordem de empilhamento vertical.' },
-        { type: 'css', name: 'overflow', answer: 'Controla o que acontece com conteúdo grande.' },
-        { type: 'css', name: 'transition', answer: 'Cria transições suaves de estilo.' }
-    ];
+        const items = [
+            // === 25 TAGS HTML BASICAS ===
+            { type: 'html', name: '<div>', answer: 'Divisão genérica em bloco.' },
+            { type: 'html', name: '<span>', answer: 'Contêiner em linha para texto.' },
+            { type: 'html', name: '<p>', answer: 'Define um parágrafo.' },
+            { type: 'html', name: '<a>', answer: 'Cria um hiperlink.' },
+            { type: 'html', name: '<img>', answer: 'Exibe uma imagem na tela.' },
+            { type: 'html', name: '<ul>', answer: 'Lista não ordenada (bolinhas).' },
+            { type: 'html', name: '<ol>', answer: 'Lista ordenada (números).' },
+            { type: 'html', name: '<li>', answer: 'Item de uma lista.' },
+            { type: 'html', name: '<h1>', answer: 'Título principal da página.' },
+            { type: 'html', name: '<h2>', answer: 'Subtítulo de nível 2.' },
+            { type: 'html', name: '<header>', answer: 'Cabeçalho da página ou seção.' },
+            { type: 'html', name: '<footer>', answer: 'Rodapé da página ou seção.' },
+            { type: 'html', name: '<nav>', answer: 'Bloco de links de navegação.' },
+            { type: 'html', name: '<main>', answer: 'Conteúdo principal do site.' },
+            { type: 'html', name: '<section>', answer: 'Seção genérica de conteúdo.' },
+            { type: 'html', name: '<form>', answer: 'Formulário para envio de dados.' },
+            { type: 'html', name: '<input>', answer: 'Campo para o usuário digitar.' },
+            { type: 'html', name: '<button>', answer: 'Botão clicável.' },
+            { type: 'html', name: '<br>', answer: 'Quebra de linha obrigatória.' },
+            { type: 'html', name: '<hr>', answer: 'Linha horizontal divisória.' },
+            { type: 'html', name: '<strong>', answer: 'Texto em negrito/importante.' },
+            { type: 'html', name: '<em>', answer: 'Texto em itálico/ênfase.' },
+            { type: 'html', name: '<html>', answer: 'Elemento raiz do documento.' },
+            { type: 'html', name: '<head>', answer: 'Contém os metadados e configurações.' },
+            { type: 'html', name: '<body>', answer: 'Corpo visível da página.' },
 
-    // Função para embaralhar a array (Algoritmo de Fisher-Yates)
-    function shuffle(array) {
-        let currentIndex = array.length, randomIndex;
-        while (currentIndex != 0) {
-            randomIndex = Math.floor(Math.random() * currentIndex);
-            currentIndex--;
-            [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+            // === 25 PROPRIEDADES CSS BASICAS ===
+            { type: 'css', name: 'color', answer: 'Altera a cor do texto.' },
+            { type: 'css', name: 'background-color', answer: 'Modifica a cor de fundo.' },
+            { type: 'css', name: 'font-size', answer: 'Define o tamanho da fonte.' },
+            { type: 'css', name: 'font-family', answer: 'Define o tipo/família da fonte.' },
+            { type: 'css', name: 'font-weight', answer: 'Ajusta a espessura (negrito) da fonte.' },
+            { type: 'css', name: 'width', answer: 'Define a largura do elemento.' },
+            { type: 'css', name: 'height', answer: 'Define a altura do elemento.' },
+            { type: 'css', name: 'padding', answer: 'Espaçamento interno do elemento.' },
+            { type: 'css', name: 'margin', answer: 'Espaçamento externo do elemento.' },
+            { type: 'css', name: 'border', answer: 'Cria uma borda ao redor.' },
+            { type: 'css', name: 'border-radius', answer: 'Arredonda os cantos do elemento.' },
+            { type: 'css', name: 'text-align', answer: 'Alinha o texto (left, center, right).' },
+            { type: 'css', name: 'display', answer: 'Define o tipo de renderização (flex, block...).' },
+            { type: 'css', name: 'flex-direction', answer: 'Define a direção dos itens no Flexbox.' },
+            { type: 'css', name: 'justify-content', answer: 'Alinha os itens no eixo principal.' },
+            { type: 'css', name: 'align-items', answer: 'Alinha os itens no eixo cruzado.' },
+            { type: 'css', name: 'position', answer: 'Define o método de posicionamento.' },
+            { type: 'css', name: 'top / left', answer: 'Move elementos posicionados.' },
+            { type: 'css', name: 'box-shadow', answer: 'Adiciona sombra ao redor do elemento.' },
+            { type: 'css', name: 'opacity', answer: 'Ajusta o nível de transparência.' },
+            { type: 'css', name: 'cursor', answer: 'Muda o tipo de ponteiro do mouse.' },
+            { type: 'css', name: 'text-decoration', answer: 'Adiciona/remove traços e sublinhados.' },
+            { type: 'css', name: 'z-index', answer: 'Controla a ordem de empilhamento vertical.' },
+            { type: 'css', name: 'overflow', answer: 'Controla o que acontece com conteúdo grande.' },
+            { type: 'css', name: 'transition', answer: 'Cria transições suaves de estilo.' }
+        ];
+
+        function shuffle(array) {
+            let currentIndex = array.length, randomIndex;
+            while (currentIndex != 0) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+                [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+            }
+            return array;
         }
-        return array;
-    }
 
-    // Função para renderizar o tabuleiro
-    function initGame() {
-        // Alterna a exibição dos botões
-        startBtn.classList.add('hidden');
-        creditsBtn.classList.add('hidden');
-        homeBtn.classList.remove('hidden');
+        function initGame() {
+            startBtn.classList.add('hidden');
+            creditsBtn.classList.add('hidden');
+            homeBtn.classList.remove('hidden');
 
-        minefield.innerHTML = '';
-        minefield.classList.remove('active');
-        countdownDisplay.textContent = '3';
-        
-        clearInterval(timer); // Limpa qualquer temporizador ativo anterior
+            minefield.innerHTML = '';
+            minefield.classList.remove('active');
+            countdownDisplay.textContent = '3';
+            clearInterval(timer); 
 
-        const shuffledItems = shuffle([...items]);
+            const shuffledItems = shuffle([...items]);
 
-        shuffledItems.forEach(item => {
-            const cell = document.createElement('div');
-            cell.classList.add('cell');
-            cell.textContent = '?';
-            
-            let clickState = 0;
+            shuffledItems.forEach(item => {
+                const cell = document.createElement('div');
+                cell.classList.add('cell');
+                cell.textContent = '?';
+                let clickState = 0;
 
-            cell.addEventListener('click', () => {
-                if (clickState === 0) {
-                    clickState = 1;
-                    cell.textContent = item.name;
-                    cell.classList.add('named', `type-${item.type}`);
-                } else if (clickState === 1) {
-                    clickState = 2;
-                    cell.textContent = item.answer;
-                    cell.classList.remove('named', 'type-html', 'type-css');
-                    cell.classList.add('revealed');
-                }
+                cell.addEventListener('click', () => {
+                    if (clickState === 0) {
+                        clickState = 1;
+                        cell.textContent = item.name;
+                        cell.classList.add('named', `type-${item.type}`);
+                    } else if (clickState === 1) {
+                        clickState = 2;
+                        cell.textContent = item.answer;
+                        cell.classList.remove('named', 'type-html', 'type-css');
+                        cell.classList.add('revealed');
+                    }
+                });
+
+                minefield.appendChild(cell);
             });
 
-            minefield.appendChild(cell);
+            let count = 3;
+            timer = setInterval(() => {
+                count--;
+                if (count > 0) {
+                    countdownDisplay.textContent = count;
+                } else if (count === 0) {
+                    countdownDisplay.textContent = "VALENDO!";
+                } else {
+                    clearInterval(timer);
+                    countdownDisplay.textContent = "";
+                    minefield.classList.add('active');
+                }
+            }, 1000);
+        }
+
+        function resetToMenu() {
+            clearInterval(timer);
+            countdownDisplay.textContent = "";
+            minefield.innerHTML = '';
+            minefield.classList.remove('active');
+            homeBtn.classList.add('hidden');
+            startBtn.classList.remove('hidden');
+            creditsBtn.classList.remove('hidden');
+        }
+
+        startBtn.addEventListener('click', initGame);
+        homeBtn.addEventListener('click', resetToMenu);
+
+        creditsBtn.addEventListener('click', () => {
+            mainScreen.classList.add('hidden');
+            creditsScreen.classList.remove('hidden');
         });
 
-        // Contagem regressiva antes de liberar o tabuleiro
-        let count = 3;
-        timer = setInterval(() => {
-            count--;
-            if (count > 0) {
-                countdownDisplay.textContent = count;
-            } else if (count === 0) {
-                countdownDisplay.textContent = "VALENDO!";
-            } else {
-                clearInterval(timer);
-                countdownDisplay.textContent = "";
-                minefield.classList.add('active');
-            }
-        }, 1000);
-    }
-
-    // Retorna o painel para o estado inicial de menu
-    function resetToMenu() {
-        clearInterval(timer);
-        countdownDisplay.textContent = "";
-        minefield.innerHTML = '';
-        minefield.classList.remove('active');
-        
-        homeBtn.classList.add('hidden');
-        startBtn.classList.remove('hidden');
-        creditsBtn.classList.remove('hidden');
-    }
-
-    // Eventos dos botões de navegação e início
-    startBtn.addEventListener('click', initGame);
-    homeBtn.addEventListener('click', resetToMenu);
-
-    creditsBtn.addEventListener('click', () => {
-        mainScreen.classList.add('hidden');
-        creditsScreen.classList.remove('hidden');
-    });
-
-    backBtn.addEventListener('click', () => {
-        creditsScreen.classList.add('hidden');
-        mainScreen.classList.remove('hidden');
-    });
-</script>
+        backBtn.addEventListener('click', () => {
+            creditsScreen.classList.add('hidden');
+            mainScreen.classList.remove('hidden');
+        });
+    </script>
 
 </body>
 </html>
