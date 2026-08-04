@@ -1,229 +1,202 @@
-:root {
-    --grid-gap: 10px;
-    --background-color: #0f111a;
-    --cell-color-initial: #1e2235;
-    --cell-color-html: #ff5722;
-    --cell-color-css: #00bcd4;
-    --cell-color-revealed: #ffffff;
-    --text-color-light: #ffffff;
-    --text-color-dark: #0f111a;
-    --border-color: #2e3440;
-    --border-radius: 12px;
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-/* Força o corpo da página a ocupar 100% da tela e centralizar tudo vertical e horizontalmente */
 body {
-    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background: radial-gradient(circle at center, #1a1f36 0%, var(--background-color) 100%);
-    margin: 0;
-    padding: 20px;
-    box-sizing: border-box;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #222;
+  font-family: Arial, sans-serif;
+  overflow: hidden;
 }
 
-h1 {
-    color: #ffffff;
-    font-size: 2.5rem;
-    font-weight: 800;
-    letter-spacing: -0.5px;
-    margin: 0 0 5px 0;
-    text-align: center;
-    text-shadow: 0 2px 10px rgba(255, 255, 255, 0.1);
+/* Botão Inicial Grande */
+.btn-enviar {
+  padding: 24px 60px;
+  font-size: 28px;
+  font-weight: bold;
+  color: #ffffff;
+  border: none;
+  border-radius: 16px;
+  cursor: pointer;
+  background-image: linear-gradient(135deg, #4f46e5, #05e92b);
+  transition: all 0.4s ease;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
 }
 
-p.subtitle {
-    color: #9aa5ce;
-    margin: 0 0 30px 0;
-    text-align: center;
-    font-size: 1rem;
-    font-weight: 400;
-    max-width: 600px;
+.btn-enviar:hover {
+  background-image: linear-gradient(135deg, #ec4899, #f97316);
+  transform: scale(1.05);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
 }
 
-/* Telas principais agindo como blocos flexíveis verticais centralizados */
-.screen {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
+/* Menu de Seleção de Fases */
+.fase-menu {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
 }
 
-/* Divs invisíveis de controle para evitar desalinhamento ao sumir com botões */
-.menu-controls, .game-controls {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
+.fase-title {
+  color: #ffffff;
+  font-size: 36px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
-.hidden {
-    display: none !important;
+.fase-buttons {
+  display: flex;
+  gap: 20px;
 }
 
-/* Botões com visual moderno e margens automáticas para centralização pura */
-.btn {
-    color: white;
-    border: none;
-    padding: 14px 32px;
-    font-size: 1.1rem;
-    font-weight: 600;
-    border-radius: 8px;
-    cursor: pointer;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    margin: 0 auto;
+.btn-fase {
+  padding: 18px 40px;
+  font-size: 22px;
+  font-weight: bold;
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  background-image: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
 }
 
-.btn:active {
-    transform: scale(0.95);
+.btn-fase:hover:not(:disabled) {
+  background-image: linear-gradient(135deg, #06b6d4, #2563eb);
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
 }
 
-#start-btn {
-    background: linear-gradient(135deg, #28a745, #1e7e34);
-    margin-bottom: 15px;
+.btn-fase.btn-bloqueado {
+  background-image: linear-gradient(135deg, #6b7280, #374151);
+  color: #9ca3af;
+  cursor: not-allowed;
+  opacity: 0.7;
+  box-shadow: none;
 }
 
-#start-btn:hover {
-    background: linear-gradient(135deg, #218838, #19692c);
-    box-shadow: 0 0 20px rgba(40, 167, 69, 0.4);
+/* Estilo do Slider de Volume */
+.volume-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
 }
 
-#credits-btn {
-    background: linear-gradient(135deg, #4b526d, #3b4055);
-    font-size: 0.95rem;
-    padding: 10px 24px;
+.volume-container label {
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: bold;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
-#credits-btn:hover {
-    background: linear-gradient(135deg, #3b4055, #2c3141);
+.volume-container input[type="range"] {
+  width: 220px;
+  cursor: pointer;
+  accent-color: #3b82f6;
 }
 
-.reset-btn-style, #back-btn {
-    background: linear-gradient(135deg, #dc3545, #bd2130);
-    margin-bottom: 20px;
+/* Botão Voltar (Canto inferior direito) */
+.btn-voltar-menu {
+  position: absolute;
+  bottom: 30px;
+  right: 30px;
+  padding: 14px 28px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  background-image: linear-gradient(135deg, #ef4444, #b91c1c);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+  transition: all 0.3s ease;
 }
 
-.reset-btn-style:hover, #back-btn:hover {
-    background: linear-gradient(135deg, #c82333, #a71d2a);
-    box-shadow: 0 0 20px rgba(220, 53, 69, 0.4);
+.btn-voltar-menu:hover {
+  background-image: linear-gradient(135deg, #f97316, #eab308);
+  transform: translateY(-2px) scale(1.05);
 }
 
-/* Cronômetro centralizado */
-#countdown-display {
-    font-size: 3.5rem;
-    color: #ff9f43;
-    font-weight: 800;
-    margin: 10px auto;
-    min-height: 70px;
-    text-align: center;
-    text-shadow: 0 0 15px rgba(255, 159, 67, 0.5);
+/* Container do Jogo */
+.game-container {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #70c5ce;
 }
 
-/* Grid centralizado e responsivo */
-.grid-container {
-    display: grid;
-    width: 100%;
-    max-width: 800px;
-    grid-template-columns: repeat(10, 1fr);
-    gap: var(--grid-gap);
-    opacity: 0.15;
-    pointer-events: none;
-    transition: opacity 0.5s ease;
-    margin: 0 auto;
+canvas {
+  display: block;
+  width: 100vw;
+  height: 100vh;
 }
 
-.grid-container.active {
-    opacity: 1;
-    pointer-events: auto;
+/* Menu de Pausa */
+.pause-menu {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.75);
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  z-index: 10;
 }
 
-/* Células do Campo Minado */
-.cell {
-    aspect-ratio: 1 / 1;
-    width: 100%;
-    border-radius: var(--border-radius);
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    font-weight: 700;
-    padding: 8px;
-    box-sizing: border-box;
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-    user-select: none;
-    background-color: var(--cell-color-initial);
-    color: #656d8a;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    font-size: clamp(14px, 2.5vw, 22px);
-    box-shadow: inset 0 2px 4px rgba(255,255,255,0.05);
+.pause-title {
+  color: #ffffff;
+  font-size: 42px;
+  margin-bottom: 10px;
 }
 
-.cell:not(.revealed):not(.named):hover {
-    transform: translateY(-4px);
-    background-color: #282e48;
-    color: #fff;
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+.btn-menu {
+  padding: 16px 48px;
+  font-size: 22px;
+  font-weight: bold;
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.4s ease;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+  width: 280px;
 }
 
-.cell.named.type-html { 
-    background: linear-gradient(135deg, #ff5722, #e64a19); 
-    box-shadow: 0 4px 15px rgba(255, 87, 34, 0.4);
-}
-.cell.named.type-css { 
-    background: linear-gradient(135deg, #00bcd4, #0097a7); 
-    box-shadow: 0 4px 15px rgba(0, 188, 212, 0.4);
+.btn-continuar {
+  background-image: linear-gradient(135deg, #10b981, #059669);
 }
 
-.cell.named {
-    color: var(--text-color-light);
-    font-size: clamp(10px, 1.4vw, 14px);
-    word-break: break-all;
+.btn-continuar:hover {
+  background-image: linear-gradient(135deg, #06b6d4, #3b82f6);
+  transform: translateY(-2px) scale(1.04);
 }
 
-.cell.revealed {
-    background-color: var(--cell-color-revealed);
-    color: var(--text-color-dark);
-    border: none;
-    font-weight: 500;
-    cursor: default;
-    padding: 8px;
-    font-size: clamp(9px, 1.1vw, 12px);
-    line-height: 1.3;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-    transform: scale(0.98);
+.btn-voltar-inicio {
+  background-image: linear-gradient(135deg, #ef4444, #b91c1c);
 }
 
-/* Caixa de Créditos */
-.credits-box {
-    background-color: #1e2235;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    padding: 40px 30px;
-    border-radius: 16px;
-    text-align: center;
-    color: #f8f9fa;
-    max-width: 400px;
-    width: 100%;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    margin: 0 auto;
-}
-
-.credits-box h2 {
-    color: #ff9f43;
-    margin-top: 0;
-    font-size: 1.8rem;
-    letter-spacing: -0.5px;
-}
-
-.credits-box p {
-    font-size: 1.4rem;
-    margin: 15px 0 0 0;
-    font-weight: 600;
-    color: #ffffff;
+.btn-voltar-inicio:hover {
+  background-image: linear-gradient(135deg, #f97316, #eab308);
+  transform: translateY(-2px) scale(1.04);
 }
